@@ -1,0 +1,23 @@
+<?php
+/**
+ * @var $this Laminas\View\Renderer\PhpRenderer
+ */
+?>
+<h1>Cadastro de Imoveis</h1>
+<p><a href="<?=$this->url('cadastros',[
+    'controller' => 'imovel',
+    'action' => 'editar'
+])?>">Novo imovel</a></p>
+<table>
+<thead>
+<tr>
+<th>Matrícula</th>
+<th>Descricao</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<?=$this->partialLoop('imoveis.phtml',$this->imoveis)?>
+</tbody>
+</table>
+<a href="<?=$this->url('cadastros')?>">Voltar</a>

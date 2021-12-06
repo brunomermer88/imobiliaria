@@ -8,6 +8,7 @@ use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 use Cadastros\Controller\CorretorControllerFactory;
+use Cadastros\Controller\ImovelControllerFactory;
 
 return [
     'router' => [
@@ -26,11 +27,13 @@ return [
     ],
     'controllers' => [
         'aliases' => [
-            'corretor' => Controller\CorretorController::class
+            'corretor' => Controller\CorretorController::class,
+            'imovel' => Controller\ImovelController::class
         ],
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
             Controller\CorretorController::class => CorretorControllerFactory::class,
+            Controller\ImovelController::class => ImovelControllerFactory::class
         ],
     ],
     'view_manager' => [
@@ -50,7 +53,8 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'CorretorTable' => Model\CorretorTableFactory::class
+            'CorretorTable' => Model\CorretorTableFactory::class,
+            'ImovelTable' => Model\ImovelTableFactory::class
         ]
     ]
 ];

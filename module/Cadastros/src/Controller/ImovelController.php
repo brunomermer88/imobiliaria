@@ -7,24 +7,24 @@ namespace Cadastros\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\AdapterInterface;
-use Cadastros\Model\Corretor;
-use Cadastros\Model\CorretorTable;
+use Cadastros\Model\Imovel;
+use Cadastros\Model\ImovelTable;
 use Laminas\Session\Container;
 
-class CorretorController extends AbstractActionController
+class ImovelController extends AbstractActionController
 {
-    private $corretorTable;
+    private $imovelTable;
     
-    public function __construct(CorretorTable $corretorTable)
+    public function __construct(ImovelTable $imovelTable)
     {
-        $this->corretorTable = $corretorTable;
+        $this->imovelTable = $imovelTable;
     }
     
     public function indexAction()
     {
-        $corretores = $this->corretorTable->listar();        
+        $imoveis = $this->imovelTable->listar();        
         return new ViewModel([
-            'corretores' => $corretores
+            'imoveis' => $imoveis
         ]);
     }
     
@@ -32,38 +32,38 @@ class CorretorController extends AbstractActionController
     {
         if ($this->flashMessenger()->hasMessages()){
             $sessionContainer = new Container();
-            $corretor = $sessionContainer->corretor;
+            $imovel = $sessionContainer->imovel;
         } else {
             $matricula = (int) $this->params('matricula');
-            $corretor = $this->corretorTable->buscar($matricula);
+            $imovel = $this->imovelTable->buscar($matricula);
         }
         
         $messages = $this->flashMessenger()->getMessages();
         $this->flashMessenger()->clearMessages();
         
         return new ViewModel([
-            'corretor' => $corretor,
+            'imovel' => $imovel,
             'messages' => implode(',',$messages)
         ]);
     }
     
     public function gravarAction()
     {
-        $corretor = new Corretor($_POST);
-        if (!$corretor->valido()){
+        $imovel = new Imovel($_POST);
+        if (!$imovel->valido()){
             $this->flashMessenger()->addMessage('Dados inválidos');
             $sessionContainer = new Container();
-            $sessionContainer->corretor = $corretor;
+            $sessionContainer->imovel = $imovel;
             return $this->redirect()->toRoute('cadastros',[
-                'controller' => 'corretor',
+                'controller' => 'imovel',
                 'action'     => 'editar'
             ]);
         }
         
-        $this->corretorTable->gravar($corretor);
+        $this->imovelTable->gravar($imovel);
         
         return $this->redirect()->toRoute('cadastros',[
-            'controller' => 'corretor',
+            'controller' => 'imovel',
             'action'     => 'index'
         ]);
     }
@@ -71,9 +71,9 @@ class CorretorController extends AbstractActionController
     public function apagarAction()
     {
         $matricula = (int) $this->params('matricula');
-        $this->corretorTable->apagar($matricula);
+        $this->imovelTable->apagar($matricula);
         return $this->redirect()->toRoute('cadastros',[
-            'controller' => 'corretor',
+            'controller' => 'imovel',
             'action'     => 'index'
         ]);
     }

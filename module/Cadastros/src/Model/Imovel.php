@@ -9,10 +9,11 @@ use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\StringLength;
 use Laminas\I18n\Validator\Alpha as AlphaValidator;
 
-class Corretor implements ModelInterface
+class Imovel implements ModelInterface
 {
     public $matricula;
-    public $nome;
+    public $descricao;
+    public $valor;
     
     public function __construct(array $data){
        $this->exchangeArray($data);
@@ -21,16 +22,19 @@ class Corretor implements ModelInterface
     public function exchangeArray(array $data)
     {
         $this->matricula = (int)($data['matricula'] ?? 0);
-        $nome = ($data['nome'] ?? '');
+        $descricao = (string)($data['descricao'] ?? '');
+        $this->valor = ($data['valor'] ?? '');
         $filterChain = new FilterChain();
-        $filterChain->attach(new Alpha(true))
-        ->attach(new StringToUpper());
-        $this->nome = $filterChain->filter($nome);
+        $filterChain->attach(new StringToUpper());
+        $this->descricao = $filterChain->filter(trim($descricao));
     }
     
     public function toArray()
     {
         $attributes = get_object_vars($this);
+
+        // print_r($attributes);
+
         if ($attributes['matricula'] == 0){
             unset($attributes['matricula']);
         }
@@ -39,10 +43,10 @@ class Corretor implements ModelInterface
     
     public function valido(): bool
     {
+
         $validatorChain = new ValidatorChain();
-        $validatorChain->attach(new StringLength(['min' => 3 , 'max' => 20]))
-        ->attach(new AlphaValidator());
-        return $validatorChain->isValid($this->nome);
+        $validatorChain->attach(new StringLength(['max' => 200]));
+        return $validatorChain->isValid($this->descricao);
     }    
 }
 

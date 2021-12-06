@@ -3,7 +3,7 @@ namespace Cadastros\Model;
 
 use Laminas\Db\TableGateway\TableGatewayInterface;
 
-class CorretorTable
+class ImovelTable
 {
     private $tableGateway;
     
@@ -12,9 +12,9 @@ class CorretorTable
         $this->tableGateway = $tableGateway;
     }
     
-    public function gravar(Corretor $corretor)
+    public function gravar(Imovel $imovel)
     {
-        $set = $corretor->toArray();
+        $set = $imovel->toArray();
         if (isset($set['matricula']) && !empty($set['matricula'])){
             return $this->tableGateway->update($set,['matricula' => $set['matricula']]);
         }
@@ -33,22 +33,22 @@ class CorretorTable
     
     public function apagarPorNome(string $nome)
     {
-        $this->tableGateway->delete(['nome' => $nome]);
+        $this->tableGateway->delete(['descricao' => $nome]);
     }
     
-    public function buscar(int $matricula): Corretor{
-        $corretores = $this->tableGateway->select(['matricula' => $matricula]);
-        if ($corretores->count() != 0){
-            return $corretores->current();
+    public function buscar(int $matricula): Imovel{
+        $imoveis = $this->tableGateway->select(['matricula' => $matricula]);
+        if ($imoveis->count() != 0){
+            return $imoveis->current();
         }
-        return new Corretor([]);
+        return new Imovel([]);
     }
     
-    public function buscarPorNome($nome): Corretor{
-        $corretores = $this->tableGateway->select(['nome' => $nome]);
-        if ($corretores->count() != 0){
+    public function buscarPorNome($nome): Imovel{
+        $imoveis = $this->tableGateway->select(['descricao' => $nome]);
+        if ($imoveis->count() != 0){
             return $corretores->current();
         }
-        return new Corretor([]);
+        return new Imovel([]);
     }
 }

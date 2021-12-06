@@ -12,7 +12,7 @@ use Laminas\Authentication\AuthenticationService;
 
 class IndexController extends AbstractActionController
 {
-    private AdapterInterface $dbAdapter;
+    private $dbAdapter;
     
     public function __construct(AdapterInterface $dbAdapter)
     {
